@@ -1,26 +1,339 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ocean-950: #0a1628;
+  --ocean-900: #0f2744;
+  --ocean-800: #153a5c;
+  --ocean-700: #1e4d73;
+  --ocean-600: #2a6a8f;
+  --ocean-500: #3d87ab;
+  --ocean-400: #5ba3c6;
+  --ocean-300: #8fc4dc;
+  --mint-600: #3d9b7a;
+  --mint-500: #5cbb98;
+  --mint-400: #7fd4b5;
+  --mint-300: #b8ead6;
+  --cream: #f4f9f7;
+  --gold: #c9a962;
+  --gold-soft: rgba(201, 169, 98, 0.35);
+  --background: var(--cream);
+  --foreground: var(--ocean-950);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-cormorant);
+  --font-sans: var(--font-dm-sans);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(2.25rem);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-slide-left {
+  transform: translateX(-2rem);
+}
+.reveal-slide-left.reveal-visible {
+  transform: translateX(0);
+}
+
+.reveal-slide-right {
+  transform: translateX(2rem);
+}
+.reveal-slide-right.reveal-visible {
+  transform: translateX(0);
+}
+
+/* Envelope */
+.envelope-scene {
+  perspective: 1400px;
+}
+
+.envelope {
+  position: relative;
+  width: min(88vw, 420px);
+  height: min(52vw, 260px);
+  transform-style: preserve-3d;
+}
+
+/* Lòng trong + vỏ ngoài: sleeve phủ kín như mặt ngoài bì thư thật */
+.envelope-back-stack {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  isolation: isolate;
+  border-radius: 6px;
+}
+
+/* Lòng phong bì (bên trong) — bị che hoàn toàn bởi sleeve, chỉ giữ chiều sâu nhẹ */
+.envelope-back {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 6px;
+  background: linear-gradient(160deg, var(--ocean-900) 0%, #050d18 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.35),
+    inset 0 -20px 40px rgba(0, 0, 0, 0.25);
+}
+
+/*
+ * Vỏ ngoài bì — nằm TRÊN thiệp (z-index), clip-path khung evenodd để lộ “cửa” thiệp,
+ * mép giấy bì ôm quanh thiệp như bì thật. Khớp ~ invitation-card: w 78%, bottom 12%, h 72%.
+ */
+.envelope-back-sleeve {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 6px;
+  background: linear-gradient(
+    152deg,
+    var(--ocean-600) 0%,
+    var(--ocean-700) 22%,
+    var(--ocean-800) 52%,
+    var(--ocean-900) 100%
+  );
+  box-shadow:
+    0 25px 50px -12px rgba(10, 22, 40, 0.55),
+    0 2px 0 rgba(255, 255, 255, 0.06) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.12) inset;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  /* Phủ kín thiệp — không lỗ; chữ trên thiệp chỉ lộ sau khi mở bì (sleeve mờ đi) */
+  transition: opacity 0.55s ease;
+}
+
+.envelope.open .envelope-back-sleeve {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Túi phong bì: hai cánh bên + tam giác đáy (giống cấu trúc gấp thật) */
+.envelope-pocket {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 56%;
+  z-index: 3;
+  pointer-events: none;
+  border-radius: 0 0 6px 6px;
+  overflow: hidden;
+}
+
+.envelope-pocket-wing {
+  position: absolute;
+  bottom: 0;
+  width: 51%;
+  height: 94%;
+  transform-origin: bottom center;
+}
+
+.envelope-pocket-wing--left {
+  left: 0;
+  background: linear-gradient(
+    122deg,
+    var(--ocean-600) 0%,
+    var(--ocean-800) 38%,
+    var(--ocean-900) 78%,
+    var(--ocean-950) 100%
+  );
+  clip-path: polygon(0 0, 0 100%, 100% 100%, 54% 34%);
+  box-shadow:
+    inset -8px 0 14px -6px rgba(0, 0, 0, 0.38),
+    inset 0 -3px 0 rgba(255, 255, 255, 0.04);
+  border-radius: 0 0 0 5px;
+}
+
+.envelope-pocket-wing--right {
+  right: 0;
+  background: linear-gradient(
+    238deg,
+    var(--ocean-600) 0%,
+    var(--ocean-800) 38%,
+    var(--ocean-900) 78%,
+    var(--ocean-950) 100%
+  );
+  clip-path: polygon(100% 0, 100% 100%, 0 100%, 46% 34%);
+  box-shadow:
+    inset 8px 0 14px -6px rgba(0, 0, 0, 0.38),
+    inset 0 -3px 0 rgba(255, 255, 255, 0.04);
+  border-radius: 0 0 5px 0;
+}
+
+.envelope-pocket-bottom {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 62%;
+  height: 52%;
+  transform: translateX(-50%);
+  z-index: 3;
+  background: linear-gradient(
+    180deg,
+    var(--ocean-700) 0%,
+    #122a42 45%,
+    var(--ocean-950) 100%
+  );
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  box-shadow:
+    0 -4px 12px rgba(0, 0, 0, 0.28),
+    inset 0 2px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Viền “đường xếp” nơi hai cánh gặp nhau phía trên */
+.envelope-pocket::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 30%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.12) 20%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.12) 80%,
+    transparent
+  );
+  z-index: 4;
+  pointer-events: none;
+}
+
+.envelope-flap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 52%;
+  transform-origin: 50% 0%;
+  transform-style: preserve-3d;
+  z-index: 4;
+  transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.envelope-flap-inner {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(160deg, var(--ocean-600), var(--ocean-800));
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+  border-radius: 6px 6px 0 0;
+}
+
+.envelope.open .envelope-flap {
+  transform: rotateX(180deg);
+}
+
+.invitation-card {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  width: 78%;
+  height: 72%;
+  margin-left: -39%;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #fffef8 0%, #f0faf6 100%);
+  border: 1px solid var(--gold-soft);
+  box-shadow: 0 12px 40px rgba(10, 22, 40, 0.2);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  transition:
+    transform 1s cubic-bezier(0.34, 1.2, 0.64, 1),
+    bottom 1s cubic-bezier(0.34, 1.2, 0.64, 1),
+    opacity 0.5s ease;
+}
+
+.envelope.open .invitation-card.pulled {
+  bottom: 108%;
+  transform: scale(1.05);
+}
+
+.envelope-seal {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, var(--gold), #8a7038);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  color: var(--ocean-950);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+.envelope.open .envelope-seal {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+/* Parallax decorative layer */
+.parallax-slow {
+  will-change: transform;
+}
+
+/* Tâm sự — giấy kẻ dòng nhẹ */
+.reflection-paper {
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 1.72rem,
+    rgba(30, 77, 115, 0.07) 1.72rem,
+    rgba(30, 77, 115, 0.07) calc(1.72rem + 1px)
+  );
 }
