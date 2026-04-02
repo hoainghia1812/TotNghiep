@@ -126,36 +126,36 @@ export function EventMap() {
     <section className="px-5 py-20 md:px-10 md:py-28">
       <div className="mx-auto max-w-5xl">
         <ScrollReveal>
-          <h2 className="font-display text-center text-3xl font-semibold text-[var(--ocean-950)] md:text-4xl">
+          <h2 className="font-display text-center text-3xl font-semibold text-(--ocean-950) md:text-4xl">
             Bản đồ &amp; hướng dẫn
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-center text-sm text-[var(--ocean-700)]">
+          <p className="mx-auto mt-4 max-w-2xl text-center text-sm text-(--ocean-700)">
             Ghim vị trí hội trường và các bãi gửi xe gần nhất. Mở popup trên bản đồ để xem gợi ý lối
             đi bộ và nút chỉ đường.
           </p>
         </ScrollReveal>
 
         <ScrollReveal className="mt-12" delayMs={80}>
-          <div className="overflow-hidden rounded-3xl border border-[var(--ocean-300)]/50 shadow-xl shadow-[var(--ocean-900)]/15">
+          <div className="overflow-hidden rounded-3xl border border-(--ocean-300)/50 shadow-xl shadow-(--ocean-900)/15">
             {!apiKey ? (
-              <div className="flex min-h-[320px] flex-col items-center justify-center gap-4 bg-[var(--ocean-100)] px-6 py-16 text-center">
+              <div className="flex min-h-80 flex-col items-center justify-center gap-4 bg-(--ocean-100) px-6 py-16 text-center">
                 <a
                   href={fallbackLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full bg-[var(--ocean-800)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[var(--ocean-700)]"
+                  className="rounded-full bg-(--ocean-800) px-6 py-3 text-sm font-semibold text-white transition hover:bg-(--ocean-700)"
                 >
                   Mở vị trí trên Google Maps
                 </a>
               </div>
             ) : (
               <>
-                <div ref={ref} className="h-[min(70vh,480px)] w-full bg-[var(--ocean-200)]" />
+                <div ref={ref} className="h-[min(70vh,480px)] w-full bg-(--ocean-200)" />
                 {error && (
                   <p className="bg-red-50 px-4 py-3 text-center text-sm text-red-800">{error}</p>
                 )}
                 {!ready && !error && (
-                  <p className="bg-[var(--cream)] px-4 py-3 text-center text-sm text-[var(--ocean-600)]">
+                  <p className="bg-(--cream) px-4 py-3 text-center text-sm text-(--ocean-600)">
                     Đang tải bản đồ…
                   </p>
                 )}
@@ -163,24 +163,6 @@ export function EventMap() {
             )}
           </div>
 
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-            {parkingSpots.map((p) => (
-              <li
-                key={p.id}
-                className="rounded-2xl border border-[var(--ocean-200)] bg-white/90 p-5 shadow-sm"
-              >
-                <p className="font-semibold text-[var(--ocean-900)]">{p.title}</p>
-                <p className="mt-2 text-sm leading-relaxed text-[var(--ocean-700)]">{p.hint}</p>
-                <button
-                  type="button"
-                  onClick={() => openDirections(p.lat, p.lng)}
-                  className="mt-4 text-sm font-semibold text-[var(--mint-600)] underline-offset-2 hover:underline"
-                >
-                  Chỉ đường đi bộ → hội trường
-                </button>
-              </li>
-            ))}
-          </ul>
         </ScrollReveal>
       </div>
     </section>

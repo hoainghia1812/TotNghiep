@@ -8,6 +8,8 @@
   --ocean-600: #2a6a8f;
   --ocean-500: #3d87ab;
   --ocean-400: #5ba3c6;
+  --ocean-200: #cfe4f0;
+  --ocean-100: #e8f2f8;
   --ocean-300: #8fc4dc;
   --mint-600: #3d9b7a;
   --mint-500: #5cbb98;
@@ -24,7 +26,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-display: var(--font-cormorant);
-  --font-sans: var(--font-dm-sans);
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -47,11 +49,11 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
 }
 
 .font-display {
-  font-family: var(--font-cormorant), Georgia, serif;
+  font-family: var(--font-cormorant), Georgia, "Times New Roman", serif;
 }
 
 /* Scroll reveal */
@@ -336,4 +338,215 @@ body {
     rgba(30, 77, 115, 0.07) 1.72rem,
     rgba(30, 77, 115, 0.07) calc(1.72rem + 1px)
   );
+}
+
+/* Sổ lưu bút — lời chúc rơi dọc toàn khung nhìn (viewport) */
+.guestbook-fall-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  /* không overflow:hidden — tránh cắt chữ fixed dọc viewport */
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+  box-sizing: border-box;
+}
+
+.guestbook-fall-line--viewport {
+  position: fixed;
+  top: 0;
+  /* translateX(-50%) trong keyframes: đây là % trung tâm thẻ — clamp giữ thẻ trong viewport */
+  left: clamp(28%, var(--fall-left, 50%), 72%);
+  z-index: 9;
+  width: min(52vw, 17.5rem);
+  max-width: calc(100vw - 1.25rem);
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  animation-name: guestbook-viewport-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .guestbook-fall-line--viewport {
+    left: clamp(22%, var(--fall-left, 50%), 78%);
+    width: min(58vw, 18rem);
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .guestbook-fall-line--viewport {
+    left: clamp(18%, var(--fall-left, 50%), 82%);
+    width: min(52vw, 19rem);
+  }
+}
+
+/* Thẻ lời chúc — giấy thiệp, viền vàng nhạt, chữ display */
+.guestbook-fall-tag {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  transform: rotate(var(--tag-tilt, 0deg));
+  transform-origin: 50% 30%;
+  padding: 0.65rem 0.85rem 0.85rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--gold) 55%, var(--ocean-300));
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(250, 252, 251, 0.96) 42%,
+      rgba(244, 249, 247, 0.99) 100%
+    );
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 10px 28px rgba(10, 22, 40, 0.1),
+    0 2px 8px rgba(10, 22, 40, 0.05),
+    0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+  overflow: hidden;
+}
+
+.guestbook-fall-tag::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.65rem;
+  bottom: 0.65rem;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(
+    180deg,
+    var(--mint-400) 0%,
+    var(--ocean-500) 48%,
+    var(--mint-500) 100%
+  );
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.guestbook-fall-tag__shine {
+  position: absolute;
+  inset: -40% -20% auto 20%;
+  height: 70%;
+  background: linear-gradient(
+    118deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 42%,
+    transparent 68%
+  );
+  opacity: 0.45;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+}
+
+.guestbook-fall-tag__decor {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  margin-bottom: 0.6rem;
+}
+
+.guestbook-fall-tag__gild {
+  display: block;
+  flex: 0 1 min(58%, 7.5rem);
+  min-width: 3.5rem;
+  height: 3px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--gold) 78%, white) 18%,
+    var(--gold) 50%,
+    color-mix(in srgb, var(--gold) 78%, white) 82%,
+    transparent
+  );
+  box-shadow: 0 1px 3px rgba(201, 169, 98, 0.4);
+}
+
+.guestbook-fall-tag__ornament {
+  display: block;
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 1px;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, var(--mint-300), var(--ocean-500));
+  box-shadow: 0 0 0 1px color-mix(in srgb, white 70%, transparent);
+  opacity: 0.82;
+}
+
+.guestbook-fall-tag__ornament--alt {
+  background: linear-gradient(315deg, var(--ocean-400), var(--mint-600));
+  opacity: 0.78;
+}
+
+.guestbook-fall-tag__quote {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding-left: 0.35rem;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(0.88rem, 1.15vw, 1.05rem);
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.48;
+  letter-spacing: 0.01em;
+  color: var(--ocean-950);
+  text-align: center;
+  text-wrap: balance;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.guestbook-fall-tag__quote::after {
+  content: "";
+  display: block;
+  margin: 0.7rem auto 0;
+  width: min(48%, 6.5rem);
+  height: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--ocean-300) 65%, var(--mint-400)),
+    transparent
+  );
+  opacity: 0.5;
+}
+
+
+@keyframes guestbook-viewport-fall {
+  0% {
+    transform: translate(-50%, -28vh);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.82;
+  }
+  72% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate(-50%, 118vh);
+    opacity: 0;
+  }
+}
+
+/* Bản tĩnh khi giảm chuyển động — chỉ nội dung lời chúc */
+.guestbook-fall-static {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.guestbook-fall-static .guestbook-fall-tag {
+  pointer-events: auto;
 }

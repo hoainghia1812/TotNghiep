@@ -10,7 +10,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 const notoSans = Noto_Sans({
-  variable: "--font-dm-sans",
+  variable: "--font-body",
   subsets: ["latin", "vietnamese"],
   weight: ["400", "500", "600", "700"],
 });
@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi" className={`${cormorant.variable} ${notoSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[var(--cream)] text-[var(--ocean-950)]">
+      <body className="min-h-full flex flex-col bg-(--cream) font-sans text-(--ocean-950)">
         {children}
       </body>
     </html>

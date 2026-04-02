@@ -15,22 +15,21 @@ export function ReflectionSection() {
           </p>
         </ScrollReveal>
 
-        <div className="mt-14 grid grid-cols-1 items-stretch gap-10 md:gap-12 lg:grid-cols-2 lg:gap-16">
-          <ScrollReveal
-            className="relative order-1 min-h-[280px] md:min-h-[360px] lg:min-h-0"
-            delayMs={80}
-          >
-            <div className="relative aspect-[4/5] w-full max-w-md overflow-hidden rounded-2xl border border-[var(--ocean-300)]/40 shadow-[0_28px_60px_-28px_rgba(15,39,68,0.45)] lg:max-w-none">
-              <Image
-                src={reflection.imageSrc}
-                alt={reflection.imageAlt}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                priority
-              />
+        <div className="mt-14 grid grid-cols-1 items-start gap-10 md:gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.95fr)] lg:gap-14 xl:gap-16">
+          <ScrollReveal className="relative order-1 w-full" delayMs={80}>
+            <div className="relative w-full overflow-hidden rounded-2xl border border-[var(--ocean-300)]/40 bg-[#e8f0ee] shadow-[0_28px_60px_-28px_rgba(15,39,68,0.45)]">
+              <div className="relative h-[min(72vh,640px)] w-full sm:h-[min(76vh,700px)] lg:h-[min(82vh,820px)]">
+                <Image
+                  src={reflection.imageSrc}
+                  alt={reflection.imageAlt}
+                  fill
+                  className="object-contain object-center p-2 sm:p-3"
+                  sizes="(max-width: 1024px) 100vw, 58vw"
+                  priority
+                />
+              </div>
               <div
-                className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[var(--ocean-950)]/25 via-transparent to-transparent"
+                className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-tr from-[var(--ocean-950)]/10 via-transparent to-transparent"
                 aria-hidden
               />
             </div>

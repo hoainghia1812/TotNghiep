@@ -35,7 +35,7 @@ export function EnvelopeHero() {
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center px-6 transition-all duration-700 ease-out ${
+      className={`fixed inset-0 z-100 flex flex-col items-center justify-center px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1.5rem,env(safe-area-inset-top))] transition-all duration-700 ease-out ${
         exiting ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
       style={{
@@ -62,13 +62,13 @@ export function EnvelopeHero() {
             <div className="envelope-back" aria-hidden />
           </div>
           <div
-            className={`invitation-card font-display text-[var(--ocean-900)] ${pulled ? "pulled" : ""}`}
+            className={`invitation-card font-display text-(--ocean-900) ${pulled ? "pulled" : ""}`}
           >
-            <span className="text-[0.65rem] uppercase tracking-[0.35em] text-[var(--ocean-600)]">
+            <span className="text-[0.65rem] uppercase tracking-[0.35em] text-(--ocean-600)">
               Graduation
             </span>
             <span className="mt-2 block text-2xl font-semibold md:text-3xl">Lễ Tốt Nghiệp</span>
-            <span className="mt-3 block text-sm font-sans text-[var(--ocean-700)]/90">
+            <span className="mt-3 block text-sm font-sans text-(--ocean-700)/90">
               Chạm để mở thiệp
             </span>
           </div>

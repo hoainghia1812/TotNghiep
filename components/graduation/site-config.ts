@@ -1,5 +1,11 @@
 /** Chỉnh sửa nội dung sự kiện tại đây */
 
+/**
+ * Bật/tắt hiển thị lời chúc trên frontend (rơi full màn + danh sách tĩnh khi reduce motion).
+ * Không xóa code — chỉ ẩn UI. `false`: không hiện lời chúc; form gửi vẫn lưu qua API.
+ */
+export const enableGuestbookFallAnimation = false;
+
 export const siteMeta = {
   title: "Lễ Tốt Nghiệp — Thư Mời",
   description:
@@ -21,6 +27,7 @@ export const venue = {
   /** Tọa độ ghim bản đồ — chỉnh lại trên Google Maps nếu cần chính xác từng mét */
   lat: 10.8642,
   lng: 106.5995,
+  mapUrl: "https://maps.app.goo.gl/N5Rksr1HVuz26qMc6",
 };
 
 export const parkingSpots = [
@@ -42,8 +49,8 @@ export const parkingSpots = [
 
 export const about = {
   name: "Phạm Hoài Nghĩa",
-  degree: "Cử nhân chuyên ngành công nghệ thông tin",
-  bio: "Sau những năm tháng miệt mài giảng đường và thử thách, em/cháu rất mong được chia sẻ niềm vui này cùng những người thân yêu đã đồng hành.",
+  degree: "Cử nhân chuyên ngành Công nghệ Thông tin",
+  bio: "Sau những năm tháng miệt mài trên giảng đường, vượt qua không ít thử thách và nỗ lực không ngừng, em/cháu đã chạm đến một cột mốc đáng nhớ trong hành trình của mình.\n\nEm/cháu rất mong được chia sẻ niềm vui này cùng những người thân yêu - những người đã luôn đồng hành, ủng hộ và tiếp thêm động lực trong suốt chặng đường vừa qua.",
   quote:
     "Hành trình ngàn dặm bắt đầu từ một bước chân — và hôm nay là bước chân tiếp theo.",
 };
@@ -71,10 +78,10 @@ export const timelineItems = [
   },
 ];
 
-/** Ảnh + đoạn tâm sự (chỉnh trong file này; ảnh có thể đổi sang /public/...) */
+/** Ảnh + đoạn tâm sự — ảnh đặt trong public/graduation/ */
 export const reflection = {
-  imageSrc: "https://picsum.photos/seed/tamsu/900/1100",
-  imageAlt: "Phạm Hoài Nghĩa",
+  imageSrc: "/graduation/reflection-huflit.png",
+  imageAlt: "Phạm Hoài Nghĩa — HUFLIT, lễ tốt nghiệp",
   title: "Tâm sự",
   lead: "Vài dòng gửi những người đã đồng hành cùng em trên giảng đường.",
   paragraphs: [

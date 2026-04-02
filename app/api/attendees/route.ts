@@ -1,13 +1,32 @@
 import { NextResponse } from "next/server";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseRouteClient } from "@/lib/supabase/server-client";
 
 const MAX_NAME = 200;
+let cachedServiceClient: SupabaseClient | null = null;
+
+function getSupabaseAttendeesClient(): SupabaseClient | null {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (url && serviceKey) {
+    if (!cachedServiceClient) {
+      cachedServiceClient = createClient(url, serviceKey, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      });
+    }
+    return cachedServiceClient;
+  }
+  return getSupabaseRouteClient();
+}
 
 export async function POST(request: Request) {
-  const supabase = getSupabaseRouteClient();
+  const supabase = getSupabaseAttendeesClient();
   if (!supabase) {
     return NextResponse.json(
-      { error: "Thiếu cấu hình Supabase (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY)." },
+      {
+        error:
+          "Thiếu cấu hình Supabase (NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY, hoặc fallback ANON).",
+      },
       { status: 503 },
     );
   }
@@ -55,6 +74,15 @@ export async function POST(request: Request) {
 
   if (error) {
     console.error("[attendees] insert", error);
+    if (error.code === "42501") {
+      return NextResponse.json(
+        {
+          error:
+            "Bảng attendees bị RLS chặn với ANON key. Thêm SUPABASE_SERVICE_ROLE_KEY vào .env.local hoặc mở policy INSERT cho role anon.",
+        },
+        { status: 403 },
+      );
+    }
     return NextResponse.json(
       { error: "Không lưu được xác nhận. Thử lại sau." },
       { status: 500 },
