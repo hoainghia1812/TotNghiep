@@ -7,6 +7,9 @@ export function EnvelopeHero() {
   const [pulled, setPulled] = useState(false);
   const [exiting, setExiting] = useState(false);
   const [removed, setRemoved] = useState(false);
+  const [draggingSeal, setDraggingSeal] = useState(false);
+  const [sealOffsetY, setSealOffsetY] = useState(0);
+  const [dragStartY, setDragStartY] = useState<number | null>(null);
 
   useEffect(() => {
     if (removed) return;
@@ -31,6 +34,30 @@ export function EnvelopeHero() {
     }, 1500);
   }, [open]);
 
+  const startSealDrag = useCallback((clientY: number) => {
+    if (open) return;
+    setDraggingSeal(true);
+    setDragStartY(clientY);
+    setSealOffsetY(0);
+  }, [open]);
+
+  const moveSealDrag = useCallback((clientY: number) => {
+    if (!draggingSeal || dragStartY == null || open) return;
+    const delta = clientY - dragStartY;
+    // Chi cho kéo lên trên; giới hạn biên để chuyển động ổn định.
+    const next = Math.max(-56, Math.min(0, delta));
+    setSealOffsetY(next);
+  }, [dragStartY, draggingSeal, open]);
+
+  const endSealDrag = useCallback(() => {
+    if (!draggingSeal || open) return;
+    const pulledEnough = sealOffsetY <= -34;
+    setDraggingSeal(false);
+    setDragStartY(null);
+    setSealOffsetY(0);
+    if (pulledEnough) runSequence();
+  }, [draggingSeal, open, runSequence, sealOffsetY]);
+
   if (removed) return null;
 
   return (
@@ -50,12 +77,11 @@ export function EnvelopeHero() {
 
       <button
         type="button"
-        onClick={runSequence}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") runSequence();
         }}
-        className="envelope-scene group cursor-pointer rounded-2xl border-0 bg-transparent p-4 text-left outline-none ring-2 ring-transparent transition hover:ring-white/20 focus-visible:ring-white/40"
-        aria-label="Mở thư mời"
+        className="envelope-scene group cursor-default rounded-2xl border-0 bg-transparent p-4 text-left outline-none ring-2 ring-transparent transition hover:ring-white/20 focus-visible:ring-white/40"
+        aria-label="Kéo dấu niêm lên để mở thư mời"
       >
         <div className={`envelope ${open ? "open" : ""}`}>
           <div className="envelope-back-stack">
@@ -69,7 +95,7 @@ export function EnvelopeHero() {
             </span>
             <span className="mt-2 block text-2xl font-semibold md:text-3xl">Lễ Tốt Nghiệp</span>
             <span className="mt-3 block text-sm font-sans text-(--ocean-700)/90">
-              Chạm để mở thiệp
+              Kéo dấu niêm lên để mở thiệp
             </span>
           </div>
           <div className="envelope-back-sleeve" aria-hidden />
@@ -81,14 +107,46 @@ export function EnvelopeHero() {
           <div className="envelope-flap">
             <div className="envelope-flap-inner" />
           </div>
-          <div className="envelope-seal" aria-hidden>
+          <div
+            className={`envelope-seal ${draggingSeal ? "cursor-grabbing" : "cursor-grab"}`}
+            onPointerDown={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
+              startSealDrag(e.clientY);
+            }}
+            onPointerMove={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              moveSealDrag(e.clientY);
+            }}
+            onPointerUp={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              (e.currentTarget as HTMLDivElement).releasePointerCapture(e.pointerId);
+              endSealDrag();
+            }}
+            onPointerCancel={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if ((e.currentTarget as HTMLDivElement).hasPointerCapture(e.pointerId)) {
+                (e.currentTarget as HTMLDivElement).releasePointerCapture(e.pointerId);
+              }
+              endSealDrag();
+            }}
+            style={{
+              transform: `translateY(${sealOffsetY}px)`,
+              transition: draggingSeal ? "none" : "transform 180ms ease",
+              touchAction: "none",
+            }}
+          >
             ✶
           </div>
         </div>
       </button>
 
       <p className="mt-10 max-w-sm text-center text-sm text-white/55">
-        Nhấn hoặc chạm vào phong bì để xem nội dung trang.
+        Giữ và kéo dấu niêm lên trên để mở thư mời.
       </p>
     </div>
   );
