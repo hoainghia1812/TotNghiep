@@ -60,7 +60,7 @@ export const parkingSpots = [
 ];
 
 export const about = {
-  name: "Phạm Hoài Nghĩa",
+  name: "PHẠM HOÀI NGHĨA",
   degree: "Cử nhân chuyên ngành Công nghệ Thông tin",
   bio: "Sau những năm tháng miệt mài trên giảng đường, vượt qua không ít thử thách và nỗ lực không ngừng, em/cháu đã chạm đến một cột mốc đáng nhớ trong hành trình của mình.\n\nEm/cháu rất mong được chia sẻ niềm vui này cùng những người thân yêu - những người đã luôn đồng hành, ủng hộ và tiếp thêm động lực trong suốt chặng đường vừa qua.",
   quote:
