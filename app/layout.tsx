@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Noto_Sans } from "next/font/google";
 import "./globals.css";
-import { siteMeta } from "@/components/graduation/site-config";
+import { getSiteOrigin, siteMeta } from "@/components/graduation/site-config";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -16,11 +16,34 @@ const notoSans = Noto_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteOrigin()),
   title: siteMeta.title,
   description: siteMeta.description,
   icons: {
     icon: siteMeta.faviconPath,
     apple: siteMeta.faviconPath,
+  },
+  openGraph: {
+    title: siteMeta.title,
+    description: siteMeta.description,
+    type: "website",
+    locale: "vi_VN",
+    url: "/",
+    siteName: siteMeta.title,
+    images: [
+      {
+        url: siteMeta.ogImagePath,
+        width: 1200,
+        height: 630,
+        alt: siteMeta.title,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteMeta.title,
+    description: siteMeta.description,
+    images: [siteMeta.ogImagePath],
   },
 };
 

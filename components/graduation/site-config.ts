@@ -12,7 +12,17 @@ export const siteMeta = {
     "Thư mời trân trọng tham dự Lễ Tốt Nghiệp — khoảnh khắc đánh dấu chặng đường mới.",
   /** Favicon — file trong public/ */
   faviconPath: "/graduation/reflection-huflit.png",
+  /** Ảnh preview khi gửi link (Zalo, Facebook, Messenger, …) — file trong public/ */
+  ogImagePath: "/graduation/reflection-huflit.png",
 };
+
+/**
+ * URL gốc khi deploy (https://ten-mien.com, không / cuối).
+ * Thêm NEXT_PUBLIC_SITE_URL vào .env.local — preview link chỉ đúng ảnh khi domain khớp.
+ */
+export function getSiteOrigin(): string {
+  return (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
+}
 
 /** ISO 8601 — giờ VN; dùng cho bản đồ / logic (6/6/2026 là Thứ Bảy theo lịch) */
 export const eventStartISO = "2026-06-06T15:30:00+07:00";
