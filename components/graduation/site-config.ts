@@ -7,9 +7,11 @@
 export const enableGuestbookFallAnimation = false;
 
 export const siteMeta = {
-  title: "Lễ Tốt Nghiệp — Thư Mời",
+  title: "Thư Mời Dự Lễ Tốt Nghiệp",
   description:
     "Thư mời trân trọng tham dự Lễ Tốt Nghiệp — khoảnh khắc đánh dấu chặng đường mới.",
+  /** Favicon — file trong public/ */
+  faviconPath: "/graduation/reflection-huflit.png",
 };
 
 /** ISO 8601 — giờ VN; dùng cho bản đồ / logic (6/6/2026 là Thứ Bảy theo lịch) */

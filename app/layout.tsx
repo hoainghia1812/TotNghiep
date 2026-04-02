@@ -18,6 +18,10 @@ const notoSans = Noto_Sans({
 export const metadata: Metadata = {
   title: siteMeta.title,
   description: siteMeta.description,
+  icons: {
+    icon: siteMeta.faviconPath,
+    apple: siteMeta.faviconPath,
+  },
 };
 
 export default function RootLayout({
@@ -26,7 +30,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${cormorant.variable} ${notoSans.variable} h-full antialiased`}>
+    <html
+      lang="vi"
+      className={`${cormorant.variable} ${notoSans.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
       <body className="min-h-full flex flex-col bg-(--cream) font-sans text-(--ocean-950)">
         {children}
       </body>
