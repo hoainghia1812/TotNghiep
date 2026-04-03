@@ -42,6 +42,7 @@ export function RSVPGuestbook() {
 
   const [guestSaving, setGuestSaving] = useState(false);
   const [guestError, setGuestError] = useState<string | null>(null);
+  const [guestOk, setGuestOk] = useState(false);
 
   const [mounted, setMounted] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
@@ -124,6 +125,7 @@ export function RSVPGuestbook() {
       if (!message) return;
 
       setGuestError(null);
+      setGuestOk(false);
       setGuestSaving(true);
       try {
         const display_name = guestName.trim() || "Khách mời";
@@ -138,6 +140,8 @@ export function RSVPGuestbook() {
           setMessages((prev) => [json.message!, ...prev]);
         }
         setGuestMsg("");
+        setGuestOk(true);
+        window.setTimeout(() => setGuestOk(false), 4000);
       } catch (err) {
         setGuestError(err instanceof Error ? err.message : "Có lỗi xảy ra.");
       } finally {
@@ -299,6 +303,11 @@ export function RSVPGuestbook() {
             {guestError && (
               <p className="text-center text-sm text-red-600" role="alert">
                 {guestError}
+              </p>
+            )}
+            {guestOk && (
+              <p className="text-center text-sm font-medium text-(--mint-600)" role="status">
+                Cảm ơn bạn đã gửi lời chúc!
               </p>
             )}
           </form>

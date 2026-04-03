@@ -24,12 +24,12 @@ export function getSiteOrigin(): string {
   return (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 }
 
-/** ISO 8601 — giờ VN; dùng cho bản đồ / logic (6/6/2026 là Thứ Bảy theo lịch) */
-export const eventStartISO = "2026-06-06T15:30:00+07:00";
-export const eventEndISO = "2026-06-06T18:30:00+07:00";
+/** ISO 8601 — giờ VN; dùng cho bản đồ / logic */
+export const eventStartISO = "2026-04-06T15:30:00+07:00";
+export const eventEndISO = "2026-04-06T18:30:00+07:00";
 
 /** Dòng ngày giờ hiển thị trên thư mời (tuỳ chỉnh chữ, khác Intl nếu cần) */
-export const eventDateLineVi = "Lúc 15h30 Thứ 2, 6 tháng 6, 2026";
+export const eventDateLineVi = "Lúc 15h30 Thứ Hai, 6 tháng 4, 2026";
 
 export const eventTitle = "Lễ Tốt Nghiệp Đại Học";
 
